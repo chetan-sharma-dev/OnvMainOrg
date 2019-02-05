@@ -1,0 +1,121 @@
+<aura:component implements = "force:lightningQuickActionWithoutHeader,force:appHostable,force:hasRecordId" Controller = "CaseConvertController">
+    <aura:attribute name = "caseObj" type = "Case"
+                    default = "{ 'sobjectType' : 'Case'}" />
+    <aura:attribute name = "title" type = "String" />
+    <aura:attribute name = "showForm" type = "Boolean" default="false"/>
+    <aura:attribute name = "leadSource" type = "Lead_Source__c" 
+                    default = "{ 'sobjectType' : 'Lead_Source__c'}"/>
+    <aura:attribute name = "status" type = "String" />
+    <aura:attribute name = "leadReceiptDate" type = "Date" />
+    <aura:attribute name = "pageMessage" type = "String" />
+    <aura:attribute name = "fieldErrorMessage" type = "String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="container">
+        <div class="header">
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Cases to Lead Convert</h2>
+        </div>
+        <aura:if isTrue="{!v.pageMessage.length > 0}">
+            <div class="body">
+                <div class="errorMessageDiv">
+                    <ui:outputText value="{!v.pageMessage}"/>
+                </div>
+            </div>
+            <div class="footer">
+                <button type="button" class="slds-button slds-button_neutral" onclick="{!c.closeModal}">Cancel</button>
+            </div>
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.showForm}">
+                    <div class="body">
+                        <aura:if isTrue="{!v.fieldErrorMessage.length > 0}">
+                            <div class="errorMessageDiv">
+                                <ui:outputText value="{!v.fieldErrorMessage}"/>
+                            </div>
+                        </aura:if>
+                        <div class="slds-p-around_medium" id="modal-content-id-1">
+                            <div class=" slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning:input aura:id = "leadConvertForm" 
+                                                     label = "Lead Title"
+                                                     name = "leadtitle"
+                                                     value = "{!v.title}"
+                                                     required = "true"/>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-2">
+                                    <c:strike_lookup aura:id = "leadConvertForm"
+                                                     label = "Lead Owner"
+                                                     object = "User"
+                                                     searchField = "Name"
+                                                     disabled = "true"
+                                                     value = "{!v.caseObj.OwnerId}"/>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-2">
+                                    <c:strike_lookup aura:id = "leadConvertForm"
+                                                     label = "Account"
+                                                     object = "Account"
+                                                     searchField = "Name"
+                                                     disabled = "true"
+                                                     value = "{!v.caseObj.AccountId}"/>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-2" onblur=""> 
+                                    <c:strike_lookup aura:id = "leadConvertForm"
+                                                     label = "Lead Source"
+                                                     object = "Lead_Source__c"
+                                                     searchField = "Name"
+                                                     placeholder = "Select a Lead Source"
+                                                     order = "Name"
+                                                     limit = "5"
+                                                     showRecentRecords = "true"
+                                                     allowNewRecords = "true"
+                                                     loadingMessage = "Loading Lead Sources..."
+                                                     required = "true"
+                                                     errorMessage = "Invalid input" value = "{!v.leadSource}"/>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-2">
+                                    <c:strike_lookup aura:id = "leadConvertForm"
+                                                     label = "Contact"
+                                                     object = "Contact"
+                                                     searchField = "Name"
+                                                     disabled = "true"
+                                                     value = "{!v.caseObj.ContactId}"/>
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning:input aura:id = "leadConvertForm" 
+                                                     label = "Sales Process"
+                                                     name = "LeadSalesProcess"
+                                                     value = "{!v.caseObj.Sales_Process__c}"
+                                                     readonly ="True" />
+                                </div> 
+                                
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning:input aura:id = "leadConvertForm" 
+                                                     label = "Status"
+                                                     name = "LeadStatus"
+                                                     value = "{!v.status}"
+                                                     readonly ="True" />
+                                </div>
+                                
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning:input aura:id = "leadConvertForm" 
+                                                     label = "Lead Receipt Date"
+                                                     name = "LeadReceiptDate"
+                                                     value = "{!v.leadReceiptDate}"
+                                                     readonly = "true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <button type="button" class="slds-button slds-button_neutral" onclick="{!c.closeModal}">Cancel</button>
+                        <button type="button" class="slds-button slds-button_brand" onclick="{!c.convertToLead}">Convert</button>
+                    </div>
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    </div>    
+</aura:component>

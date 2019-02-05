@@ -1,0 +1,18 @@
+.THIS .slds-modal__container{
+    width: 70% !important;
+    max-width:50rem;
+}
+.THIS slds-modal__content{
+    overflow-y:scroll;
+}
+.THIS .errorMessageDiv {
+    z-index: 1000;
+    background: rgb(194, 57, 52);
+    padding: 1rem;
+    color: rgb(255, 255, 255);
+    line-height: 1.25;
+    font-weight: 200;
+    border-radius: .25rem;
+    font-size: .80rem;
+    width:100%;
+}

@@ -1,0 +1,16 @@
+<aura:component access="global" implements="force:appHostable">
+	<c:strike_lookup
+    label="Account"
+    object="Account"
+    searchField="Name"
+    placeholder="Select an option"
+    iconName="standard:account"
+    subtitleField="Industry"
+    order="Name"
+    limit="5"
+    allowNewRecords="true"
+    showRecentRecords="true"
+    loadingMessage="Loading..."
+    errorMessage="Invalid input"/>
+    <c:testCreateContact />
+</aura:component>

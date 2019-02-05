@@ -1,0 +1,68 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:appHostable,force:hasRecordId" controller="LeadController">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <!-- create 2 aura handler with waiting and donewaiting events--> 
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <!--create a component attributs -->
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="lead" type="Lead" />
+    <aura:attribute name="opportunityName" type="String" />
+    <aura:attribute name="pageMessage" type="String"/>
+    <aura:attribute name="isValid" type="Boolean" default="true"/>
+    
+    <div class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Lead to Opportunity</h2>
+    </div>
+    <aura:if isTrue="{!v.pageMessage.length > 0}">
+        <div class="errorMessageDiv">
+            {!v.pageMessage}
+        </div>
+    </aura:if>
+    <!--loading spinner start... style=Brand Medium (blue dots)-->
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->
+    <form class="slds-form slds-p-top_small slds-p-bottom_small"> 
+        <div class=" slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:input aura:id="expenseform" label="Opportunity Name"
+                                 name="expensename"
+                                 required="true"
+                                 value="{!v.opportunityName}"
+                                 disabled="{! !v.isValid}"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <c:strike_lookup aura:id="merchantLookup"
+                                 label="Company"
+                                 object="Account"
+                                 searchField="Name"
+                                 placeholder="Select an option"
+                                 order="Name"
+                                 limit="5"
+                                 filter="RecordType.Name LIKE '%Company%'"
+                                 required="true"
+                                 disabled="{! !v.isValid}"
+                                 allowNewRecords="true"
+                                 loadingMessage="Loading..."
+                                 iconName="standard:account"
+                                 errorMessage="Invalid input" value="{!v.lead.Merchant__c}"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <label class="slds-form-element__label">Opportunity Owner</label>
+                <p><lightning:formattedText value="{!v.lead.Owner.Name}" /></p>
+            </div>
+        </div>
+    </form>
+    <div class="slds-modal__footer">
+        <button type="button" class="slds-button slds-button_neutral" onclick="{!c.closeModal}">Cancel</button>
+        <aura:if isTrue="{!v.isValid}"><button type="button" class="slds-button slds-button_brand" onclick="{!c.convert}">Convert</button></aura:if>
+    </div>
+</aura:component>

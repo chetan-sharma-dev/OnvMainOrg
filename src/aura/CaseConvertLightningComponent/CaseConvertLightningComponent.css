@@ -1,0 +1,42 @@
+.THIS.container {
+    height:418px !important;
+}
+
+.THIS .header {
+    position: relative;
+    border-top-right-radius: .25rem;
+    border-top-left-radius: .25rem;
+    border-bottom: 2px solid rgb(221, 219, 218);
+    padding: 1rem;
+    text-align: center;
+}
+
+.THIS .body {
+   	height: 73%;
+    overflow-y : auto;
+}
+
+.THIS .footer {
+    border-top: 2px solid rgb(221, 219, 218);
+    border-bottom-right-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+    padding: .75rem 1rem;
+    background-color: rgb(243, 242, 242);
+    text-align: right;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.16);
+    position: fixed;
+    left: 0;
+    width: 100%;
+}
+
+.THIS .errorMessageDiv {
+    z-index: 1000;
+    background: rgb(194, 57, 52);
+    padding: 1rem;
+    color: rgb(255, 255, 255);
+    line-height: 1.25;
+    font-weight: 200;
+    border-radius: .25rem;
+    font-size: .80rem;
+    width:100%;
+}

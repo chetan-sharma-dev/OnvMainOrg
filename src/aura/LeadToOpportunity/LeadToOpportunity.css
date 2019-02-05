@@ -1,0 +1,51 @@
+.THIS {
+    margin-top: .75rem;
+    margin-bottom: .75rem;
+}
+
+.THIS slds-modal__content {
+    overflow-y: hidden !important;
+}
+
+.THIS slds-form {
+    overflow-y: scroll !important;
+}
+
+.THIS.slds-spinner_container {  
+    z-index: 10000;
+    position: fixed;
+    width: 100% !important;
+    max-width: 70rem !important;
+    background-color: transparent;
+}
+
+.THIS.errorMessageDiv {
+    z-index: 1000;
+    background: rgb(194, 57, 52);
+    padding: 1rem;
+    color: rgb(255, 255, 255);
+    line-height: 1.25;
+    font-weight: 200;
+    border-radius: .25rem;
+    font-size: .80rem;
+    width:100%;
+}
+
+.THIS slds-gutters{
+    margin-top: .75rem;
+    margin-bottom: .75rem;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+
+.THIS.slds-modal__footer{
+    padding-top: 5%;
+    width: 113%;
+    margin-left: -7%;
+    margin-bottom: -4%;
+    height: 83px;
+}
+.THIS.slds-modal__header{
+    padding-top:0;
+}

@@ -1,0 +1,180 @@
+<aura:component access="global" controller="LeadController" implements="force:hasRecordId,lightning:actionOverride,force:lightningQuickAction,force:appHostable">
+   
+    <aura:attribute name="LeadObj" type="Lead" default="{ 'sobjectType': 'Lead'}" />
+    <aura:attribute name = "pageMessage" type = "String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- <force:recordData aura:id="forceRecord"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.LeadObjNew}"
+                      fields="Id, Name, RecordType.Name, Status, Account__c, Account__r.CurrencyIsoCode, owner__r.Id, Contact__C, Lead_Source__c, Merchant__c"
+                      mode="EDIT" /> -->
+    <!--Use "slds-m-around_xx-large" class to add standard X-Large padding to the component--> 
+    <div class="slds-m-around_xx-large">
+        
+        <!--###### MODAL BOX Start######--> 
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal uiModal--medium slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- ###### MODAL BOX HEADER Start ######-->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Lead</h2>
+                </header>
+                <aura:if isTrue="{!v.pageMessage.length > 0}">
+                    <div class="errorMessageDiv">
+                        <ui:outputText value="{!v.pageMessage}"/>
+                    </div>
+                </aura:if>
+                <!--###### MODAL BOX BODY Part Start######-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class=" slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1">
+							<h3 class="slds-section-title--divider">Lead Information</h3>
+                        </div>
+                        <lightning:input class="slds-col slds-size_1-of-2"
+                                         name = "leadtitle"
+                                         label="Lead Title" 
+                                         value="{!v.LeadObj.Title}" 
+                                         required="true" />
+                        <div class="slds-col slds-size_1-of-2">
+                            <c:strike_lookup aura:id="leadOwnerLookup"
+                                label="Lead Owner"
+                                object="User"
+                                searchField="Name"
+                                placeholder="Select an option"
+                                order="Name"
+                                limit="5"
+                                required="true"
+                                showRecentRecords="true"
+                                loadingMessage="Loading..."
+                                errorMessage="Invalid input" value="{!v.LeadObj.OwnerId}" />
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <label>Status</label> 
+                        	<force:inputField aura:id="pick" value="{!v.LeadObj.Status}" />
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <label>Sales Process</label> 
+                        	<force:inputField value ="{!v.LeadObj.Sales_Process__c}" required="true" />
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <c:strike_lookup aura:id="leadSourceLookup"
+                                label="Lead Source"
+                                object="Lead_Source__c"
+                                searchField="Name"
+                                placeholder="Select an option"
+                                order="Name"
+                                limit="5"
+                                required="true"
+                                allowNewRecords="true"
+                                showRecentRecords="true"
+                                loadingMessage="Loading..."
+                                errorMessage="Invalid input" value="{!v.LeadObj.Lead_Source__c}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <label>Lead Reciept Date</label> 
+                            <force:inputField value = "{!v.LeadObj.Lead_Receipt_Date__c}" required="true"/>
+                        </div>            
+                                         
+                        <div class="slds-col slds-size_1-of-2">
+                            <c:strike_lookup aura:id="merchantLookup"
+                                             label="Company"
+                                             object="Account"
+                                             searchField="Name"
+                                             placeholder="Select an option"
+                                             order="Name"
+                                             limit="5"
+                                             filter="RecordType.Name LIKE '%Company%'"
+                                             required="true"
+                                             allowNewRecords="true"
+                                             loadingMessage="Loading..."
+                                             iconName="standard:account"
+                                             errorMessage="Invalid input" value="{!v.LeadObj.Merchant__c}"/>
+                        </div>
+                        <lightning:textarea class="slds-col slds-size_1-of-2" name="Lead Particulars" 
+                                            label="Lead Particulars" value="{!v.LeadObj.Lead_Particulars__c}" />
+                   		<lightning:textarea class="slds-col slds-size_1-of-2" name="Lead Rejection Reason" 
+                                            label="Lead Rejection Reason" value="{!v.LeadObj.Lead_rejection_reason__c}" />
+                        <div class="slds-col slds-size_1-of-2">
+                            <label>Type</label> 
+                        	<force:inputField aura:id="pickType" value="{!v.LeadObj.Type__c}" />
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                        	<force:inputField aura:id="NatureOfQuery" value="{!v.LeadObj.Nature_Of_Query__c}" required="true" />
+                        </div>
+						<div class="slds-col slds-size_1-of-1 slds-p-around_medium">
+							<h3 class="slds-section-title--divider">Contact Information</h3>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <c:strike_lookup aura:id="accountLookup"
+                                             label="Account"
+                                             object="Account"
+                                             searchField="Name"
+                                             placeholder="Select an option"
+                                             order="Name"
+                                             limit="5"
+                                             filter="RecordType.Name LIKE '%Customer%'"
+                                             required="true"
+                                             allowNewRecords="true"
+                                             loadingMessage="Loading..."
+                                             iconName="standard:account"
+                                             errorMessage="Invalid input" value="{!v.LeadObj.Account__c}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                                <c:strike_lookup aura:id="contactLookup"
+                                                 label="Contact"
+                                                 object="Contact"
+                                                 searchField="Name"
+                                                 placeholder="Select an option"
+                                                 order="Name"
+                                                 limit="5"
+                                                 filter="{!'AccountId=\'' + v.LeadObj.Account__c + '\''}"
+                                                 required="true"
+                                                 allowNewRecords="true"
+                                                 loadingMessage="Loading..."
+                                                 iconName="standard:contact"
+                                                 errorMessage="Invalid input" value="{!v.LeadObj.Contact__c}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-p-around_medium">
+							<h3 class="slds-section-title--divider">Lead References</h3>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <label>Introduction To Company Sent</label> 
+                        	<force:inputField aura:id="pickType" value="{!v.LeadObj.IntroductionToCompanySent__c}" />
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <label>Catalogs Sent</label> 
+                        	<force:inputField aura:id="pickType" value="{!v.LeadObj.Catalogs_Sent__c}" />
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-p-around_medium">
+							<h3 class="slds-section-title--divider">Lead Cross Check Information</h3>
+                        </div>
+                        <lightning:input class="slds-col slds-size_1-of-2"
+                                         label = "Other Vendors Dealing With Client"
+                                         name = "Other Vendors Dealing With Client"
+                                         value = "{!v.LeadObj.Other_Vendors_Dealing_With_Client__c}"/>
+                        <lightning:input class="slds-col slds-size_1-of-2" 
+                                         label = "Other References"
+                                         name = "Other References"
+                                         value = "{!v.LeadObj.Other_References__c}"/>
+                        <div class="slds-col slds-size_2-of-2">
+                            <label>Lead Comments</label> 
+                            <lightning:inputRichText label="Lead Comments" value="{!v.LeadObj.Lead_Comments__c}" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-modal__footer">                
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeModel}" />
+                    <lightning:button variant="brand" label="Save" onclick="{!c.save}" />
+                </div>
+            </div>
+        </section>
+        <!--###### MODAL BOX Part END Here ######-->  	 
+    </div>
+    
+    <div aura:id="overlay" class="slds-backdrop slds-backdrop--open"></div>
+</aura:component>

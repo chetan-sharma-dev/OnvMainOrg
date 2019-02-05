@@ -1,0 +1,17 @@
+{
+    "projectName": "Onv Product Main Org",
+    "username": "product@metacube.com",
+    "id": "c5853bd0-2926-11e9-9dc8-a71b766b4033",
+    "namespace": "",
+    "orgType": "developer",
+    "loginUrl": "https://login.salesforce.com/",
+    "instanceUrl": "https://onv-marks-dev-ed.my.salesforce.com",
+    "workspace": "C:\\Users\\Chetan\\Documents",
+    "subscription": [
+        "ApexClass",
+        "ApexComponent",
+        "ApexPage",
+        "ApexTrigger",
+        "StaticResource"
+    ]
+}
